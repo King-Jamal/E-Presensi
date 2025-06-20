@@ -7,7 +7,7 @@
  
 	<h2>Tabel Dosen</h2>
 	<br/>
-	<a href="tambah.php">+ TAMBAH DOSEN</a>
+	<a href="tambah.php">+ Tambah Dosen</a>
 	<br/>
 	<br/>
 	<table border="1">
