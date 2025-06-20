@@ -5,7 +5,7 @@
 </head>
 <body>
  
-	<h2>DATA KELAS MAHASISWA</h2>
+	<h2>DATA KELAS KELAS MAHASISWA</h2>
 	<br/>
 	<a href="tambah.php">+ TAMBAH MAHASISWA</a>
 	<br/>
