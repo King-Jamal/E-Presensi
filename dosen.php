@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CRUD PHP dan MySQLi - WWW.MALASNGODING.COM</title>
+	<title>Tabel Dosen</title>
 </head>
 <body>
  
-	<h2>CRUD DATA MAHASISWA - WWW.MALASNGODING.COM</h2>
+	<h2>Tabel Dosen</h2>
 	<br/>
-	<a href="tambah.php">+ TAMBAH MAHASISWA</a>
+	<a href="tambah.php">+ TAMBAH DOSEN</a>
 	<br/>
 	<br/>
 	<table border="1">
