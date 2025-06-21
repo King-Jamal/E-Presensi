@@ -5,35 +5,29 @@
 </head>
 <body>
  
-	<h2>DATA MAHASISWA</h2>
+	<h2>DATA KELAS MAHASISWA</h2>
 	<br/>
 	<a href="tambah.php">+ TAMBAH MAHASISWA</a>
 	<br/>
 	<br/>
 	<table border="1">
 		<tr>
-			<th>Mahasiswa_id</th>
 			<th>Kelas_id</th>
-			<th>NIM</th>
-			<th>Jurusan</th>
-			<th>Nama</th>
-			<th>Username</th>
-			<th>Password</th>
+			<th>Nama_kelas</th>
+			<th>Semester</th>
+			<th>Tahun_ajaran</th>
 			<th>Aksi</th>
 		</tr>
 		<?php 
-		include 'database.php';
-		$data = mysqli_query($koneksi,"select * from mahasiswa");
+		include '../config/database.php';
+		$data = mysqli_query($koneksi,"select * from kelas");
 		while($d = mysqli_fetch_array($data)){
 			?>
 			<tr>
-				<td><?php echo $d['Mahasiswa_id']; ?></td>
 				<td><?php echo $d['Kelas_id']; ?></td>
-				<td><?php echo $d['NIM']; ?></td>
-				<td><?php echo $d['Jurusan']; ?></td>
-				<td><?php echo $d['Nama']; ?></td>
-				<td><?php echo $d['Username']; ?></td>
-				<td><?php echo $d['Password']; ?></td>
+				<td><?php echo $d['Nama_kelas']; ?></td>
+				<td><?php echo $d['Semester']; ?></td>
+				<td><?php echo $d['Tahun_ajaran']; ?></td>
 				<td>
 					<a href="edit.php?id=<?php echo $d['id']; ?>">EDIT</a>
 					<a href="hapus.php?id=<?php echo $d['id']; ?>">HAPUS</a>
@@ -49,5 +43,5 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once ("database.php");
+require_once ("../config/database.php");
 ?>

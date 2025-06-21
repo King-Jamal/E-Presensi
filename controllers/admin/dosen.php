@@ -20,7 +20,7 @@
 			<th>Aksi</th>
 		</tr>
 		<?php 
-		include 'database.php';
+		include '../config/database.php';
 		$no = 1;
 		$data = mysqli_query($koneksi,"select * from dosen");
 		while($d = mysqli_fetch_array($data)){
