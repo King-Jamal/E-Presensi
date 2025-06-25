@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
             break;
         case 'dosen':
             $query = "SELECT * FROM dosen WHERE username = ?";
-            $redirect = "../views/dosen/absensi.php";
+            $redirect = "../views/dosen/dashboard.php";
             $id_field = "Dosen_id";
             break;
         case 'mahasiswa':
             $query = "SELECT * FROM mahasiswa WHERE username = ?";
-            $redirect = "../views/mahasiswa/presensi.php";
+            $redirect = "../views/mahasiswa/dashboard.php";
             $id_field = "Mahasiswa_id";
             break;
         default:
@@ -44,6 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
             $_SESSION['username'] = $user['Username'];
             $_SESSION['role'] = $selectedRole;
             $_SESSION['nama'] = $user['Nama'] ?? '';
+
+            // data user 
+            if ($selectedRole === 'dosen') {
+                $_SESSION['Dosen_id'] = $user['Dosen_id'];
+            }
 
             header("Location: $redirect");
             exit;
