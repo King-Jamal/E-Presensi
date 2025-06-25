@@ -51,7 +51,7 @@ $total_mk=$koneksi->query("SELECT COUNT(*) AS total FROM mata_kuliah")->fetch_as
         <a href="../../controllers/admin/jadwal.php">Jadwal</a>
     </div>
     <div>
-        <p><a href="./logout.php">Logout</a></p>
+        <p><a href="../../controllers/logout.php">Logout</a></p>
     </div>
 </body>
 </html>
