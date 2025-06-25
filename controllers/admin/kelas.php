@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once ("../../config/database.php");
 
 // Create
@@ -11,28 +8,20 @@ if(isset($_POST['submit'])){
 	$Semester = $_POST['Semester'];
 	$Tahun_ajaran = $_POST['Tahun_ajaran'];
 
-	$query = "INSERT INTO kelas (Kelas_id, Nama_kelas, Semester, Tahun_ajaran) VALUES ('$kelas_id','$Nama_kelas','$Semester','$Tahun_ajaran')";
-	if (!$koneksi->query($query)) {
-		echo "SQL Error: " . $koneksi->error;
-	} else {
-		header("location: kelas.php");
-	}
+	$query = "INSERT INTO kelas (Kelas_id, Nama_kelas, Semester, Tahun_ajaran) VALUES (null,'$Nama_kelas','$Semester','$Tahun_ajaran')";
+	header("location: kelas.php");
 }
 
 // Update
 if(isset($_POST['update'])){
 	$id = $_POST['id'];
-	$kelas_id = $_POST['Kelas_id'];
 	$Nama_kelas = $_POST['Nama_kelas'];
 	$Semester = $_POST['Semester'];
 	$Tahun_ajaran = $_POST['Tahun_ajaran'];
 
-	$query = "UPDATE kelas SET Kelas_id='$kelas_id', Nama_kelas='$Nama_kelas', Semester='$Semester', Tahun_ajaran='$Tahun_ajaran' WHERE Kelas_id='$id'";
-	if (!$koneksi->query($query)) {
-		echo "SQL Error: " . $koneksi->error;
-	} else {
-		header("location: kelas.php");
-	}
+	$query = "UPDATE kelas SET  Nama_kelas='$Nama_kelas', Semester='$Semester', Tahun_ajaran='$Tahun_ajaran' WHERE Kelas_id='$id'";
+	header("location: kelas.php");
+	
 }
 
 // Edit
@@ -60,8 +49,22 @@ if(isset($_GET['hapus'])){
  
 	<h2>DATA KELAS</h2>
 	<br/>
-	<a href="tambah.php">+ TAMBAH KELAS</a>
-	<br/><br/>
+	<br/>
+	<h3><?= $edit ? "Edit Data" : "Tambah Data" ?></h3>
+	<form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
+		<input type="hidden" name="id" value="<?= $edit ? $data['Kelas_id'] : "" ?>">
+		Nama_kelas : <input type="text" name="Nama_kelas" value="<?= $edit ? $data['Nama_kelas'] : "" ?>" required>
+		<br>
+		Semester :<input type="text" name="Semester" value="<?= $edit ? $data['Semester'] : "" ?>" required>
+		<br>
+		Tahun_ajaran :<input type="text" name="Tahun_ajaran" value="<?= $edit ? $data['Tahun_ajaran'] : "" ?>" required>
+		<br>
+		<button type="submit" name="<?= $edit ? "update" : "submit" ?>"><?= $edit ? "Update" : "Tambahkan" ?></button>
+		<?php if($edit): ?>
+			<a href="kelas.php">Batal</a>
+		<?php endif; ?>
+	</form>
+	<br/>
 	<table border="1">
 		<tr>
 			<th>Kelas_id</th>
