@@ -16,7 +16,7 @@ $total_mk=$koneksi->query("SELECT COUNT(*) AS total FROM mata_kuliah")->fetch_as
 <body>
     <?php 
     session_start();
-    if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
+    if (!isset($_SESSION['username'])) {
         header("Location: ../../login.php");
         exit();
     }

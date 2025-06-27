@@ -1,7 +1,7 @@
 <?php 
 session_start();
 require_once "../../config/database.php";
-if(!isset($_SESSION['username']) || $_SESSION['role'] !== 'mahasiswa') {
+if(!isset($_SESSION['username'])) {
     header("location: ../../controllers/login.php");
     exit;
 }

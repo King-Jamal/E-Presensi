@@ -3,61 +3,49 @@ session_start();
 include '../config/database.php';
 
 $error = '';
-$selectedRole = $_POST['role'] ?? '';
 
 // Proses login (saat form login dikirim)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['password'], $_POST['role'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['password'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // Tentukan tabel dan field berdasarkan role
-    switch ($selectedRole) {
-        case 'admin':
-            $query = "SELECT * FROM admin_ WHERE username = ?";
-            $redirect = "../views/admin/dashboard.php";
-            $id_field = "Admin_id";
-            break;
-        case 'dosen':
-            $query = "SELECT * FROM dosen WHERE username = ?";
-            $redirect = "../views/dosen/dashboard.php";
-            $id_field = "Dosen_id";
-            break;
-        case 'mahasiswa':
-            $query = "SELECT * FROM mahasiswa WHERE username = ?";
-            $redirect = "../views/mahasiswa/dashboard.php";
-            $id_field = "Mahasiswa_id";
-            break;
-        default:
-            $error = "Role tidak valid!";
-            $query = null;
-    }
+    $stmt = $koneksi->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (!$error && $stmt = $koneksi->prepare($query)) {
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    // jika username ditemukan
+     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        // Cocokkan password secara langsung (plaintext)
-        if ($user && $user['Password'] === $password) {
-            $_SESSION['id'] = $user[$id_field];
-            $_SESSION['username'] = $user['Username'];
-            $_SESSION['role'] = $selectedRole;
-            $_SESSION['nama'] = $user['Nama'] ?? '';
+        // jika password cocok (plaintext)
+        if ($password === $user['password']) {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-            // data user 
-            if ($selectedRole === 'dosen') {
-                $_SESSION['Dosen_id'] = $user['Dosen_id'];
+            // redirect sesuai role
+            switch ($user['role']) {
+                case 'admin':
+                    header("Location: ../../views/admin/dashboard.php");
+                    break;
+                case 'dosen':
+                    header("Location: ../../views/dosen/dashboard.php");
+                    break;
+                case 'mahasiswa':
+                    header("Location: ../../views/mahasiswa/dashboard.php");
+                    break;
+                default:
+                    echo "Role tidak dikenali.";
             }
-
-            header("Location: $redirect");
             exit;
         } else {
-            $error = "Username atau password salah!";
+            $error = "Password salah.";
         }
-    } elseif (!$stmt) {
-        $error = "Query gagal disiapkan.";
+    } else {
+        $error = "Username tidak ditemukan.";
     }
+    
 }
 ?>
 
@@ -70,31 +58,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 <body>
     <div>
         <h2>E-PRESENSI MAHASISWA</h2>
-
         <form method="POST">
-            <label for="role">Pilih Role:</label><br>
-            <select name="role" id="role" onchange="this.form.submit()" required>
-                <option value="">-- Pilih Role --</option>
-                <option value="mahasiswa" <?= $selectedRole == 'mahasiswa' ? 'selected' : '' ?>>Mahasiswa</option>
-                <option value="dosen" <?= $selectedRole == 'dosen' ? 'selected' : '' ?>>Dosen</option>
-                <option value="admin" <?= $selectedRole == 'admin' ? 'selected' : '' ?>>Admin</option>
-            </select>
-        </form>
-
-        <?php if ($selectedRole): ?>
-        <form method="POST">
-            <input type="hidden" name="role" value="<?= $selectedRole ?>">
-
             <label>Username:</label><br>
             <input type="text" name="username" required><br>
 
             <label>Password:</label><br>
             <input type="password" name="password" required><br>
 
-            <button type="submit">Login sebagai <?= ucfirst($selectedRole) ?></button>
+            <button type="submit">Login</button>
         </form>
-        <?php endif; ?>
-
         <?php if ($error): ?>
             <p class="error"><?= $error ?></p>
         <?php endif; ?>
