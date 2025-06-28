@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 
         // jika password cocok (plaintext)
         if ($password === $user['password']) {
-            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 <body>
     <div>
         <h2>E-PRESENSI MAHASISWA</h2>
-        <form method="POST">
+        <form method="POST" action="">
             <label>Username:</label><br>
             <input type="text" name="username" required><br>
 

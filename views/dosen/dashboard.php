@@ -2,12 +2,19 @@
 session_start();
 
 require_once "../../config/database.php";
-if(!isset($_SESSION['username'])) {
+if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'dosen') {
     header("location: ../../controllers/login.php");
     exit;
 }
-$id=(int)$_SESSION['Dosen_id'];
-$count_cls = $koneksi->query("SELECT COUNT(*) AS total FROM jadwal WHERE Dosen_id = $id")->fetch_assoc()['total'];
+$user_id=(int)$_SESSION['user_id'];
+$dosen_result=$koneksi->query("SELECT Dosen_id FROM dosen WHERE user_id=$user_id");
+if ($dosen_result->num_rows === 0) {
+    die("Data dosen tidak ditemukan.");
+}
+$dosen = $dosen_result->fetch_assoc();
+$dosen_id = (int)$dosen['Dosen_id'];
+
+$count_cls = $koneksi->query("SELECT COUNT(*) AS total FROM jadwal WHERE Dosen_id = $user_id")->fetch_assoc()['total'];
 $hari = [
     'Sunday'    => 'Minggu',
     'Monday'    => 'Senin',
@@ -19,7 +26,7 @@ $hari = [
 ];
 $today=date('l');
 $day = $hari[$today];
-$count_s = $koneksi->query("SELECT COUNT(*) AS total FROM jadwal WHERE Hari = '$day'")->fetch_assoc()['total'];
+$count_s = $koneksi->query("SELECT COUNT(*) AS total FROM jadwal WHERE Hari = '$day' and Dosen_id = $dosen_id")->fetch_assoc()['total'];
 
 
 
@@ -34,7 +41,7 @@ FROM jadwal j
 JOIN kelas k ON j.Kelas_id = k.Kelas_id
 JOIN mata_kuliah mk ON j.Mk_id = mk.Mk_id
 LEFT JOIN mahasiswa m ON m.Kelas_id = k.Kelas_id
-WHERE j.Dosen_id = $id
+WHERE j.Dosen_id = $dosen_id
 GROUP BY j.Jadwal_id
 ";
 
