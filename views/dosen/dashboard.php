@@ -30,7 +30,7 @@ $count_s = $koneksi->query("SELECT COUNT(*) AS total FROM jadwal WHERE Hari = '$
 
 
 
-$query = "SELECT 
+$query_sulurh_jadwal = "SELECT 
     k.Nama_kelas AS Nama_kelas,
     mk.Nama_MK AS Nama_MK,
     COUNT(m.Mahasiswa_id) AS Jumlah_mahasiswa,
@@ -45,7 +45,25 @@ WHERE j.Dosen_id = $dosen_id
 GROUP BY j.Jadwal_id
 ";
 
-$result = $koneksi->query($query);
+$seluruh_jadwal = $koneksi->query($query_sulurh_jadwal);
+
+$query_jadwal_hari = "SELECT 
+    j.Jadwal_id,
+    k.Nama_kelas AS Nama_kelas,
+    mk.Nama_MK AS Nama_MK,
+    COUNT(m.Mahasiswa_id) AS Jumlah_mahasiswa,
+    j.Hari,
+    j.Jam_mulai,
+    j.Jam_selesai
+FROM jadwal j
+JOIN kelas k ON j.Kelas_id = k.Kelas_id
+JOIN mata_kuliah mk ON j.Mk_id = mk.Mk_id
+LEFT JOIN mahasiswa m ON m.Kelas_id = k.Kelas_id
+WHERE j.Dosen_id = $dosen_id AND j.Hari = '$day'
+GROUP BY j.Jadwal_id
+";
+
+$jadwal_hari_ini = $koneksi->query($query_jadwal_hari);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +88,7 @@ $result = $koneksi->query($query);
             </tr>
         </thead>
         <tbody>
-            <?php while ($row = $result->fetch_assoc()): ?>
+            <?php while ($row = $seluruh_jadwal->fetch_assoc()): ?>
             <tr>
                 <td><?= htmlspecialchars($row['Nama_kelas'] ?? '-') ?></td>
                 <td><?= htmlspecialchars($row['Nama_MK'] ?? '-') ?></td>
@@ -81,6 +99,30 @@ $result = $koneksi->query($query);
             <?php endwhile; ?>
         </tbody>
     </table>
-
+    <h2>🕒 Jadwal Hari Ini (<?= $day ?>)</h2>
+    <table border="1"  cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Kelas</th>
+                <th>Mata Kuliah</th>
+                <th>Jam</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row=$jadwal_hari_ini -> fetch_assoc()): ?>
+            <tr>
+                <td><?= $row['Nama_kelas'] ?></td>
+                <td><?= $row['Nama_MK'] ?></td>
+                <td><?= $row['Jam_mulai'] ?> - <?= $row['Jam_selesai'] ?></td>
+                <td>
+                <a href="./absensi.php?jadwal_id=<?= $row['Jadwal_id'] ?>">📝 Absensi</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+       
+    </table>
+    <a href="./absensi.php">demo</a>
 </body>
 </html>
