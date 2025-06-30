@@ -54,8 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 <html>
 <head>
     <title>Login E-Presensi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- <style>
         body {
         background: linear-gradient(to right, #6a11cb, #2575fc);
         min-height: 100vh;
@@ -79,10 +80,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
         font-size: 24px;
         color: #2575fc;
         }
-    </style>
+    </style> -->
 </head>
-<body class="login-page">
-    <div class="container">
+<body>
+  <div class="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">E-PRESENSI</h1>
+        <p class="text-sm text-gray-500">Silakan login untuk melanjutkan</p>
+      </div>
+
+      <form action="" method="POST" class="space-y-4">
+        <div class="flex items-center border rounded-md overflow-hidden">
+          <input type="text" id="username" name="username" required placeholder="Username"
+            class="w-full px-4 py-2 outline-none text-sm text-gray-700" />
+          <div class="bg-gray-100 px-3 flex items-center justify-center">
+            <ion-icon name="person-outline" class="text-xl text-gray-500"></ion-icon>
+          </div>
+        </div>
+
+        <div class="flex items-center border rounded-md overflow-hidden">
+          <input type="password" id="password" name="password" required placeholder="Password"
+            class="w-full px-4 py-2 outline-none text-sm text-gray-700" />
+          <div class="bg-gray-100 px-3 flex items-center justify-center">
+            <ion-icon name="lock-closed-outline" class="text-xl text-gray-500"></ion-icon>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200">
+          Login
+        </button>
+      </form>
+
+      <div class="text-center mt-4">
+        <?php if ($error): ?>
+          <p class="text-sm text-red-600 font-medium"><?= $error ?></p>
+        <?php endif; ?>
+      </div>
+
+      <div class="text-center mt-6">
+        <p class="text-xs text-gray-400">© 2025 Sistem E-Presensi</p>
+      </div>
+    </div>
+  </div>
+
+    <!-- <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-5">
         <div class="card p-4">
@@ -125,10 +168,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script> -->
 
 </body>
 </html>
