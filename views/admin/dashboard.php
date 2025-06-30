@@ -115,6 +115,12 @@ if (!isset($_SESSION['username'])) {
         <div class="mt-8 grid grid-cols-1">
             <?php require_once '../../controllers/admin/dosen.php'; ?>
         </div>
+        <div class="mt-8 grid grid-cols-1">
+            <?php require_once '../../controllers/admin/jadwal.php'; ?>
+        </div>
+        <div class="mt-8 grid grid-cols-1">
+            <?php require_once '../../controllers/admin/kelas.php'; ?>
+        </div>
       </main>
     </div>
   </div>

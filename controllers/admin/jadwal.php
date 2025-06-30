@@ -72,108 +72,130 @@ $query = "SELECT
           ORDER BY FIELD(Hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')";
 
 $result = $koneksi->query($query);
+
+
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-	<h3><?= $edit ? "Edit Data" : "Tambah Data" ?></h3>
-    <form method="POST">
-        <?php if($edit): ?>
+<div class="max-w-5xl mx-auto">
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-2xl font-semibold mb-4"><?= $edit ? "Edit Data Jadwal" : "Tambah Data Jadwal" ?></h2>
+      <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="hidden" name="Jadwal_id" value="<?= $edit ? $data['Jadwal_id'] : "" ?>">
-        <?php endif; ?>
-       <label>Mata Kuliah:</label>
-        <select name="Mk_id" required>
-            <option value="">-- Pilih Mata Kuliah --</option>
-            <?php $mk->data_seek(0); while($row = $mk->fetch_assoc()): ?>
-                <option value="<?= $row['Mk_id'] ?>" <?= $edit && $data['Mk_id'] == $row['Mk_id'] ? 'selected' : '' ?>><?= $row['Nama_MK'] ?></option>
-            <?php endwhile; ?>
-        </select><br>
 
-        <label>Kelas:</label>
-        <select name="Kelas_id" required>
-            <option value="">-- Pilih Kelas --</option>
-            <?php $kelas->data_seek(0); while($row = $kelas->fetch_assoc()): ?>
-                <option value="<?= $row['Kelas_id'] ?>" <?= $edit && $data['Kelas_id'] == $row['Kelas_id'] ? 'selected' : '' ?>><?= $row['Nama_kelas'] ?></option>
-            <?php endwhile; ?>
-        </select><br>
+            <div>
+            	<label class="block text-sm font-medium text-gray-700">Mata Kuliah</label>
+            	<select name="Mk_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <option value="">-- Pilih Mata Kuliah --</option>
+                    <?php $mk->data_seek(0); while($row = $mk->fetch_assoc()): ?>
+                        <option value="<?= $row['Mk_id'] ?>" <?= $edit && $data['Mk_id'] == $row['Mk_id'] ? 'selected' : '' ?>><?= $row['Nama_MK'] ?></option>
+                    <?php endwhile; ?>
+            	</select>
+            </div>
 
-        <label>Dosen:</label>
-        <select name="Dosen_id" required>
-            <option value="">-- Pilih Dosen --</option>
-            <?php $dosen->data_seek(0); while($row = $dosen->fetch_assoc()): ?>
-                <option value="<?= $row['Dosen_id'] ?>" <?= $edit && $data['Dosen_id'] == $row['Dosen_id'] ? 'selected' : '' ?>><?= $row['Nama'] ?></option>
-            <?php endwhile; ?>
-        </select><br>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Kelas</label>
+              <select name="Kelas_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                  <option value="">-- Pilih Kelas --</option>
+                  <?php $kelas->data_seek(0); while($row = $kelas->fetch_assoc()): ?>
+                      <option value="<?= $row['Kelas_id'] ?>" <?= $edit && $data['Kelas_id'] == $row['Kelas_id'] ? 'selected' : '' ?>><?= $row['Nama_kelas'] ?></option>
+                  <?php endwhile; ?>
+              </select>
+            </div>
 
-        <label>Ruangan:</label>
-        <select name="Ruangan_id" required>
-            <option value="">-- Pilih Ruangan --</option>
-            <?php $ruangan->data_seek(0); while($row = $ruangan->fetch_assoc()): ?>
-                <option value="<?= $row['Ruangan_id'] ?>" <?= $edit && $data['Ruangan_id'] == $row['Ruangan_id'] ? 'selected' : '' ?>><?= $row['Nama_ruangan'] ?></option>
-            <?php endwhile; ?>
-        </select><br>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Dosen</label>
+              <select name="Dosen_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                  <option value="">-- Pilih Dosen --</option>
+                  <?php $dosen->data_seek(0); while($row = $dosen->fetch_assoc()): ?>
+                      <option value="<?= $row['Dosen_id'] ?>" <?= $edit && $data['Dosen_id'] == $row['Dosen_id'] ? 'selected' : '' ?>><?= $row['Nama'] ?></option>
+                  <?php endwhile; ?>
+              </select>
+            </div>
 
-        <label>Hari:</label>
-        <select name="Hari" required>
-            <option value="">-- Pilih Hari --</option>
-            <?php foreach (["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"] as $hari): ?>
-                <option value="<?= $hari ?>" <?= $edit && $data['Hari'] == $hari ? 'selected' : '' ?>><?= $hari ?></option>
-            <?php endforeach; ?>
-        </select><br>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Ruangan</label>
+              <select name="Ruangan_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                  <option value="">-- Pilih Ruangan --</option>
+                  <?php $ruangan->data_seek(0); while($row = $ruangan->fetch_assoc()): ?>
+                      <option value="<?= $row['Ruangan_id'] ?>" <?= $edit && $data['Ruangan_id'] == $row['Ruangan_id'] ? 'selected' : '' ?>><?= $row['Nama_ruangan'] ?></option>
+                  <?php endwhile; ?>
+              </select>
+            </div>
 
-        <label>Jam Mulai:</label>
-        <input type="time" name="Jam_mulai" value="<?= $edit ? $data['Jam_mulai'] : '' ?>" required><br>
-        <label>Jam Selesai:</label>
-        <input type="time" name="Jam_selesai" value="<?= $edit ? $data['Jam_selesai'] : '' ?>" required><br>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Hari</label>
+              <select name="Hari" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                  <option value="">-- Pilih Hari --</option>
+                  <option value="Senin" <?= $edit && $data['Hari'] == 'Senin' ? 'selected' : '' ?>>Senin</option>
+                  <option value="Selasa" <?= $edit && $data['Hari'] == 'Selasa' ? 'selected' : '' ?>>Selasa</option>
+                  <option value="Rabu" <?= $edit && $data['Hari'] == 'Rabu' ? 'selected' : '' ?>>Rabu</option>
+                  <option value="Kamis" <?= $edit && $data['Hari'] == 'Kamis' ? 'selected' : '' ?>>Kamis</option>
+                  <option value="Jumat" <?= $edit && $data['Hari'] == 'Jumat' ? 'selected' : '' ?>>Jumat</option>
+                  <option value="Sabtu" <?= $edit && $data['Hari'] == 'Sabtu' ? 'selected' : '' ?>>Sabtu</option>
+              </select>
+            </div>
 
-        <button type="submit" name="<?= $edit ? 'update' : 'submit' ?>"><?= $edit ? 'Update' : 'Tambah' ?></button>
-        <?php if ($edit): ?>
-            <a href="<?= $_SERVER['PHP_SELF'] ?>">Batal</a>
-        <?php endif; ?>
-    </form>
-    <br>
-    <h2>Tambah Jadwal</h2>
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Mata Kuliah</th>
-                <th>Kelas</th>
-                <th>Dosen</th>
-                <th>Ruangan</th>
-                <th>Hari</th>
-                <th>Jam Mulai</th>
-                <th>Jam Selesai</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-            $no = 1;
-            while($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= $row['Nama_MK'] ?></td>
-                    <td><?= $row['Nama_kelas'] ?></td>
-                    <td><?= $row['Nama'] ?></td>
-                    <td><?= $row['Nama_ruangan'] ?></td>
-                    <td><?= $row['Hari'] ?></td>
-                    <td><?= $row['Jam_mulai'] ?></td>
-                    <td><?= $row['Jam_selesai'] ?></td>
-                    <td>
-                        <a href="<?= $_SERVER['PHP_SELF'] . '?edit=' . $row['Jadwal_id'] ?>">Edit</a>
-                        <a href="<?= $_SERVER['PHP_SELF'] . '?delete=' . $row['Jadwal_id'] ?>">Hapus</a>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</body>
-</html>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Jam Mulai</label>
+              <input type="time" name="Jam_mulai" value="<?= $edit ? $data['Jam_mulai'] : '' ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Jam Selesai</label>
+              <input type="time" name="Jam_selesai" value="<?= $edit ? $data['Jam_selesai'] : '' ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
+
+            <div class="md:col-span-2 flex gap-4 mt-4">
+                <button type="submit" name="<?= $edit ? "update" : "submit" ?>"
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    <?= $edit ? "Update" : "Tambahkan" ?>
+                </button>
+                <?php if ($edit): ?>
+                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
+                <?php endif; ?>
+            </div>
+      </form>
+
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Mata Kuliah</th>
+                        <th class="px-4 py-2 text-left">Kelas</th>
+                        <th class="px-4 py-2 text-left">Dosen</th>
+                        <th class="px-4 py-2 text-left">Ruangan</th>
+                        <th class="px-4 py-2 text-left">Hari</th>
+                        <th class="px-4 py-2 text-left">Jam Mulai</th>
+                        <th class="px-4 py-2 text-left">Jam Selesai</th>
+                        <th class="px-4 py-2 text-left">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2"><?= $row['Nama_MK']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Nama_kelas']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Nama']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Nama_ruangan']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Hari']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Jam_mulai']; ?></td>
+                        <td class="px-4 py-2"><?= $row['Jam_selesai']; ?></td>
+                        <td class="px-4 py-2">
+                        <a href="?edit=<?= $row['Jadwal_id']; ?>" class="text-blue-600 hover:underline mr-2">Edit</a>
+                        <a href="?hapus=<?= $row['Jadwal_id']; ?>" class="text-red-600 hover:underline">Hapus</a>
+                        </td>
+                    </tr>
+                    <?php endwhile; ?>
+                </tbody>
+		    </table>
+        </div>
+
+    </div>
+
+
+</div>
+
+ 
+
 
