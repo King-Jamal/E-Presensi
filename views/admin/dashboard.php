@@ -108,17 +108,17 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <!-- Data Mahasiswa -->
-        <div class="mt-8 grid grid-cols-1">
+        <div class="mt-8 grid grid-cols-1" id="form_mhs">
             <?php require_once '../../controllers/admin/mahasiswa.php'; ?>
         </div>
         <!-- Data Dosen -->
-        <div class="mt-8 grid grid-cols-1">
+        <div class="mt-8 grid grid-cols-1" id="form_dosen">
             <?php require_once '../../controllers/admin/dosen.php'; ?>
         </div>
-        <div class="mt-8 grid grid-cols-1">
+        <div class="mt-8 grid grid-cols-1" id="form_jadwal" >
             <?php require_once '../../controllers/admin/jadwal.php'; ?>
         </div>
-        <div class="mt-8 grid grid-cols-1">
+        <div class="mt-8 grid grid-cols-1" id="form_kelas">
             <?php require_once '../../controllers/admin/kelas.php'; ?>
         </div>
       </main>

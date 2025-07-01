@@ -2,7 +2,7 @@
 require_once '../../config/database.php';
 
 // create
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit_jadwal'])) {
     $mk_id = $_POST['Mk_id'];
     $kelas_id = $_POST['Kelas_id'];
     $dosen_id = $_POST['Dosen_id'];
@@ -13,27 +13,23 @@ if (isset($_POST['submit'])) {
 
     $koneksi->query("INSERT INTO jadwal(Mk_id, Kelas_id, Dosen_id, Ruangan_id, Hari, Jam_mulai, Jam_selesai) 
                     VALUES ('$mk_id','$kelas_id','$dosen_id','$ruangan_id','$hari','$jam_mulai','$jam_selesai')");
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
 }
 // delete
-if (isset($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
+if (isset($_GET['hapus_jadwal'])) {
+    $id = (int)$_GET['hapus_jadwal'];
     $koneksi->query("DELETE FROM jadwal WHERE Jadwal_id = $id");
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
 }
 // Edit data
 $edit=False;
 $data=[];
-if(isset($_GET['edit'])){
+if(isset($_GET['edit_jadwal'])){
 	$edit=True;
-	$id = $_GET['edit'];
+	$id = $_GET['edit_jadwal'];
 	$data=$koneksi->query("SELECT * FROM jadwal WHERE Jadwal_id='$id'")->fetch_assoc();
 }
 
 // Update data
-if(isset($_POST['update'])){
+if(isset($_POST['update_jadwal'])){
     $jadwal_id = $_POST['Jadwal_id'];
 	$mk_id = $_POST['Mk_id'];
     $kelas_id = $_POST['Kelas_id'];
@@ -43,9 +39,7 @@ if(isset($_POST['update'])){
     $jam_mulai = $_POST['Jam_mulai'];
     $jam_selesai = $_POST['Jam_selesai'];
 
-    $koneksi->query("UPDATE jadwal SET Mk_id='$mk_id', Kelas_id='$kelas_id', Dosen_id='$dosen_id', Ruangan_id='$ruangan_id', Hari='$hari', Jam_mulai='$jam_mulai', Jam_selesai='$jam_selesai' WHERE Jadwal_id='$id'");
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+    $koneksi->query("UPDATE jadwal SET Mk_id='$mk_id', Kelas_id='$kelas_id', Dosen_id='$dosen_id', Ruangan_id='$ruangan_id', Hari='$hari', Jam_mulai='$jam_mulai', Jam_selesai='$jam_selesai' WHERE Jadwal_id='$jadwal_id'");
 }
 
 // dropdown data
@@ -75,10 +69,10 @@ $result = $koneksi->query($query);
 
 
 ?>
-<div class="max-w-5xl mx-auto">
+<div class="w-[1000px] max-w-full mx-auto " >
     <div class="bg-white p-6 rounded-lg shadow mb-6">
         <h2 class="text-2xl font-semibold mb-4"><?= $edit ? "Edit Data Jadwal" : "Tambah Data Jadwal" ?></h2>
-      <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form action="<?= $_SERVER['PHP_SELF'] ?>#form_jadwal" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="hidden" name="Jadwal_id" value="<?= $edit ? $data['Jadwal_id'] : "" ?>">
 
             <div>
@@ -145,19 +139,19 @@ $result = $koneksi->query($query);
             </div>
 
             <div class="md:col-span-2 flex gap-4 mt-4">
-                <button type="submit" name="<?= $edit ? "update" : "submit" ?>"
+                <button type="submit" name="<?= $edit ? "update_jadwal" : "submit_jadwal" ?>"
                         class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                     <?= $edit ? "Update" : "Tambahkan" ?>
                 </button>
                 <?php if ($edit): ?>
-                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
+					<a href="<?= strtok($_SERVER["REQUEST_URI"], '?') ?>#form_jadwal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
                 <?php endif; ?>
             </div>
       </form>
 
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
-        <div class="overflow-x-auto">
+        <div class="h-full">
             <table class="min-w-full divide-y divide-gray-200 text-sm">
                 <thead class="bg-gray-100">
                     <tr>
@@ -182,8 +176,9 @@ $result = $koneksi->query($query);
                         <td class="px-4 py-2"><?= $row['Jam_mulai']; ?></td>
                         <td class="px-4 py-2"><?= $row['Jam_selesai']; ?></td>
                         <td class="px-4 py-2">
-                        <a href="?edit=<?= $row['Jadwal_id']; ?>" class="text-blue-600 hover:underline mr-2">Edit</a>
-                        <a href="?hapus=<?= $row['Jadwal_id']; ?>" class="text-red-600 hover:underline">Hapus</a>
+
+                        <a href="?edit_jadwal=<?= $row['Jadwal_id']; ?>#form_jadwal" class="text-blue-600 hover:underline mr-2">Edit</a>
+                        <a href="?hapus_jadwal=<?= $row['Jadwal_id']; ?>#form_jadwal" class="text-red-600 hover:underline">Hapus</a>
                         </td>
                     </tr>
                     <?php endwhile; ?>

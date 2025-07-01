@@ -2,49 +2,77 @@
 require_once ("../../config/database.php");
 
 // Create data
-if(isset($_POST['submit'])) {
+if(isset($_POST['submit_dosen'])) {
 	$NIP = $_POST['NIP'];
 	$nama = $_POST['Nama'];
 	$username = $_POST['Username'];
 	$password = $_POST['Password'];
 
-	$koneksi->query("INSERT INTO dosen VALUES (null,'$NIP','$nama','$username','$password')");
-	header("location: dosen.php");
+	// 1. Insert ke tabel users
+	$koneksi->query("INSERT INTO users (username, password, role) VALUES ('$username', '$password', 'dosen')");
+	$user_id = $koneksi->insert_id; // Ambil id user terakhir
+
+	// 2. Insert ke tabel mahasiswa
+	$koneksi->query("INSERT INTO dosen ( User_id, NIP, Nama,Username,Password) VALUES ('$user_id', '$NIP', '$nama','$username','$password')");
+
 }
 
 // Update data
-if(isset($_POST['update'])){
+if(isset($_POST['update_dosen'])) {
 	$id = $_POST['id'];
 	$NIP = $_POST['NIP'];
 	$nama = $_POST['Nama'];
 	$username = $_POST['Username'];
 	$password = $_POST['Password'];
 
-	$koneksi->query("UPDATE dosen SET NIP='$NIP', Nama='$nama', Username='$username', Password='$password' WHERE Dosen_id='$id'");
-	header("location: dosen.php");
+	// Ambil user_id dari mahasiswa
+    $result = $koneksi->query("SELECT User_id FROM dosen WHERE Dosen_id = '$id'");
+    $row = $result->fetch_assoc();
+    $user_id = $row['User_id'];
+
+    // Update data di tabel mahasiswa
+    $koneksi->query("UPDATE dosen 
+                     SET NIP = '$NIP',  
+                         Nama = '$nama',
+						 Username = '$username',
+						 Password = '$password'
+                     WHERE Dosen_id = '$id'");
+
+    // Update data login di tabel users
+    $koneksi->query("UPDATE users 
+                     SET username = '$username', 
+                         password = '$password' 
+                     WHERE id = '$user_id'");
+	
 }
 // Edit data
 $edit=False;
 $data=[];
-if(isset($_GET['edit'])){
+if(isset($_GET['edit_dosen'])){
 	$edit=True;
-	$id = $_GET['edit'];
+	$id = $_GET['edit_dosen'];
 	$data=$koneksi->query("SELECT * FROM dosen WHERE Dosen_id='$id'")->fetch_assoc();
 }
 
 // Delete data
-if(isset($_GET['hapus'])){
-	$id = $_GET['hapus'];
-	$koneksi->query("DELETE FROM dosen WHERE Dosen_id='$id'");
-	header("location: dosen.php");
+if(isset($_GET['hapus_dosen'])){
+	$id = $_GET['hapus_dosen'];
+	// Ambil user_id dari mahasiswa
+    $result = $koneksi->query("SELECT User_id FROM dosen WHERE Dosen_id = '$id'");
+    $row = $result->fetch_assoc();
+    $user_id = $row['User_id'];
+
+    // Hapus user → mahasiswa ikut terhapus karena ON DELETE CASCADE
+    $koneksi->query("DELETE FROM users WHERE id = '$user_id'");
+
 }
 
 // Pagination
 $limit = 10;
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$page = isset($_GET['page_dosen']) ? (int) $_GET['page_dosen'] : 1;
 $offset = ($page - 1) * $limit;
 
-$search = isset($_GET['search']) ? $koneksi->real_escape_string($_GET['search']) : "";
+$search = isset($_GET['search_dosen']) ? $koneksi->real_escape_string($_GET['search_dosen']) : "";
 
 // Tambahkan WHERE jika ada keyword
 $where = "";
@@ -61,10 +89,10 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 ?>
 
 
-<div class="max-w-5xl mx-auto">
+<div class="w-[1000px] max-w-full mx-auto"  >
 	<div class="bg-white p-6 rounded-lg shadow mb-6">
     	<h2 class="text-2xl font-semibold mb-4"><?= $edit ? "Edit Data Dosen" : "Tambah Data Dosen" ?></h2>
-		<form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<form action="<?= $_SERVER['PHP_SELF'] ?>#form_dosen" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         	<input type="hidden" name="id" value="<?= $edit ? $data['Dosen_id'] : "" ?>">
 			<div>
 				<label class="block text-sm font-medium text-gray-700">NIP</label>
@@ -87,21 +115,21 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
 			</div>
 			<div class="md:col-span-2 flex gap-4 mt-4">
-				<button type="submit" name="<?= $edit ? "update" : "submit" ?>"
+				<button type="submit" name="<?= $edit ? "update_dosen" : "submit_dosen" ?>"
 						class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
 					<?= $edit ? "Update" : "Tambahkan" ?>
 				</button>
 				<?php if ($edit): ?>
-					<a href="<?= $_SERVER['PHP_SELF'] ?>" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
+					<a href="<?= strtok($_SERVER["REQUEST_URI"], '?') ?>#form_dosen" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
 				<?php endif; ?>
 			</div>
 			
 		</form>
 	</div>
     <div class="bg-white p-6 rounded-lg shadow">
-    	<div class="overflow-x-auto">
+    	<div class="h-full">
 			<form method="GET" class="mb-4">
-				<input type="text" name="search" placeholder="Cari Dosen..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" class="border border-gray-300 rounded px-4 py-2 w-64">
+				<input type="text" name="search_dosen" placeholder="Cari Dosen..." value="<?= isset($_GET['search_dosen']) ? htmlspecialchars($_GET['search_dosen']) : '' ?>" class="border border-gray-300 rounded px-4 py-2 w-64">
 				<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cari</button>
 			</form>
 			<table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -125,8 +153,8 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 						<td class="px-4 py-2"><?= $d['Username']; ?></td>
 						<td class="px-4 py-2"><?= $d['Password']; ?></td>
 						<td class="px-4 py-2">
-						<a href="?edit=<?= $d['Dosen_id']; ?>" class="text-blue-600 hover:underline mr-2">Edit</a>
-						<a href="?hapus=<?= $d['Dosen_id']; ?>" class="text-red-600 hover:underline">Hapus</a>
+						<a href="?edit_dosen=<?= $d['Dosen_id']; ?>#form_dosen" class="text-blue-600 hover:underline mr-2">Edit</a>
+						<a href="?hapus_dosen=<?= $d['Dosen_id']; ?>#form_dosen" class="text-red-600 hover:underline">Hapus</a>
 						</td>
 					</tr>
 					<?php endwhile; ?>
@@ -136,7 +164,7 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 				<ul class="inline-flex items-center -space-x-px">
 					<!-- Tombol Sebelumnya -->
 					<li>
-					<a href="?page=<?= max(1, $page - 1) ?>" class="px-2 py-1 ml-0 leading-tight text-gray-500 bg-white  rounded-l-lg  hover:text-gray-700" aria-label="Previous">
+					<a href="?page_dosen=<?= max(1, $page - 1) ?>" class="px-2 py-1 ml-0 leading-tight text-gray-500 bg-white  rounded-l-lg  hover:text-gray-700" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 					</li>
@@ -144,7 +172,7 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 					<!-- Tombol Halaman -->
 					<?php for ($i = 1; $i <= $total_pages; $i++): ?>
 					<li>
-						<a href="?page=<?= $i ?>" class="px-2 py-1 leading-tight  <?= $page == $i ? ' text-blue-500' : ' text-gray-500  hover:text-gray-700' ?>">
+						<a href="?page_dosen=<?= $i ?>" class="px-2 py-1 leading-tight  <?= $page == $i ? ' text-blue-500' : ' text-gray-500  hover:text-gray-700' ?>">
 						<?= $i ?>
 						</a>
 					</li>
@@ -152,7 +180,7 @@ $data_dosen = $koneksi->query("SELECT * FROM dosen $where LIMIT $limit OFFSET $o
 
 					<!-- Tombol Selanjutnya -->
 					<li>
-					<a href="?page=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 leading-tight text-gray-500 bg-white   rounded-r-lg  hover:text-gray-700" aria-label="Next">
+					<a href="?page_dosen=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 leading-tight text-gray-500 bg-white   rounded-r-lg  hover:text-gray-700" aria-label="Next">
 						<span aria-hidden="true">&raquo;</span>
 					</a>
 					</li>
