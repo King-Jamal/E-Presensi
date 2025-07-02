@@ -26,7 +26,7 @@ if (!isset($_SESSION['username'])) {
   <div class="min-h-screen flex flex-col">
 
     <!-- HEADER -->
-    <header class="bg-white shadow p-4 flex items-center justify-between">
+    <header class="bg-white shadow p-4 flex items-center justify-between sticky top-0 z-10">
       <!-- Hamburger Button -->
       <button 
         x-show="!isOpen"
@@ -56,7 +56,7 @@ if (!isset($_SESSION['username'])) {
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="translate-x-0 opacity-100"
         x-transition:leave-end="-translate-x-full opacity-0"
-        class="w-64 bg-white shadow-xl p-6"
+        class="sticky top-0 h-screen w-64 z-20 bg-white shadow-xl p-6"
       >
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-bold text-gray-800">Admin Panel</h2>
@@ -74,11 +74,10 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <nav class="space-y-3">
-          <a href="#" class="block text-gray-800 hover:text-indigo-600">Mahasiswa</a>
-          <a href="#" class="block text-gray-800 hover:text-indigo-600">Dosen</a>
-          <a href="#" class="block text-gray-800 hover:text-indigo-600">Kelas</a>
-          <a href="#" class="block text-gray-800 hover:text-indigo-600">Jadwal</a>
-          <a href="#" class="block text-gray-800 hover:text-indigo-600">Absensi</a>
+          <a href="#form_mhs" class="block text-gray-800 hover:text-indigo-600">Mahasiswa</a>
+          <a href="#form_dosen" class="block text-gray-800 hover:text-indigo-600">Dosen</a>
+          <a href="#form_kelas" class="block text-gray-800 hover:text-indigo-600">Kelas</a>
+          <a href="#form_jadwal" class="block text-gray-800 hover:text-indigo-600">Jadwal</a>
         </nav>
 
         <div class="mt-6 border-t pt-4">
@@ -89,21 +88,21 @@ if (!isset($_SESSION['username'])) {
       <!-- MAIN CONTENT -->
       <main class="flex-1 p-6 ml-0 md:ml-0">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
-            <div class="text-gray-600 text-sm">Total Mahasiswa</div>
-            <div class="text-3xl font-bold text-blue-600 mt-2"><?= $total_mahasiswa ?></div>
+          <div class="bg-red-600 rounded-2xl shadow p-6 border border-gray-100">
+            <div class="text-white text-sm">Total Mahasiswa</div>
+            <div class="text-3xl font-bold text-white mt-2"><?= $total_mahasiswa ?></div>
           </div>
-          <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
-            <div class="text-gray-600 text-sm">Total Dosen</div>
-            <div class="text-3xl font-bold text-green-600 mt-2"><?= $total_dosen ?></div>
+          <div class="bg-green-600 rounded-2xl shadow p-6 border border-gray-100">
+            <div class="text-white text-sm">Total Dosen</div>
+            <div class="text-3xl font-bold text-white mt-2"><?= $total_dosen ?></div>
           </div>
-          <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
-            <div class="text-gray-600 text-sm">Total Kelas</div>
-            <div class="text-3xl font-bold text-purple-600 mt-2"><?= $total_kelas ?></div>
+          <div class="bg-blue-600 rounded-2xl shadow p-6 border border-gray-100">
+            <div class="text-white text-sm">Total Kelas</div>
+            <div class="text-3xl font-bold text-white mt-2"><?= $total_kelas ?></div>
           </div>
-          <div class="bg-white rounded-2xl shadow p-6 border border-gray-100">
-            <div class="text-gray-600 text-sm">Total Mata Kuliah</div>
-            <div class="text-3xl font-bold text-pink-600 mt-2"><?= $total_mk ?></div>
+          <div class="bg-yellow-600 rounded-2xl shadow p-6 border border-gray-100">
+            <div class="text-white text-sm">Total Mata Kuliah</div>
+            <div class="text-3xl font-bold text-white mt-2"><?= $total_mk ?></div>
           </div>
         </div>
 
@@ -115,11 +114,11 @@ if (!isset($_SESSION['username'])) {
         <div class="mt-8 grid grid-cols-1" id="form_dosen">
             <?php require_once '../../controllers/admin/dosen.php'; ?>
         </div>
-        <div class="mt-8 grid grid-cols-1" id="form_jadwal" >
-            <?php require_once '../../controllers/admin/jadwal.php'; ?>
-        </div>
         <div class="mt-8 grid grid-cols-1" id="form_kelas">
             <?php require_once '../../controllers/admin/kelas.php'; ?>
+        </div>
+        <div class="mt-8 grid grid-cols-1" id="form_jadwal" >
+            <?php require_once '../../controllers/admin/jadwal.php'; ?>
         </div>
       </main>
     </div>
