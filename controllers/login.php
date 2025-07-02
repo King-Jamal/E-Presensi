@@ -55,32 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 <head>
     <title>Login E-Presensi</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <!-- <style>
-        body {
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        }
-
-        .card {
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-control:focus {
-        box-shadow: none;
-        border-color: #2575fc;
-        }
-
-        .logo-text {
-        font-weight: bold;
-        font-size: 24px;
-        color: #2575fc;
-        }
-    </style> -->
+   
 </head>
 <body>
   <div class="flex justify-center items-center min-h-screen bg-gray-100 px-4">
@@ -125,53 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
     </div>
   </div>
 
-    <!-- <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="card p-4">
-          <div class="text-center mb-4">
-            <div class="logo-text">E-PRESENSI</div>
-            <small class="text-muted">Silakan login untuk melanjutkan</small>
-          </div>
-
-          <form action="" method="POST">
-            <div class="mb-3 input-group">
-              <input type="text" class="form-control" id="username" name="username" required placeholder="Username"> 
-              <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span><ion-icon name="person-outline"></ion-icon></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3 input-group">
-              <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
-              <div class="input-group-append">
-                    <div class="input-group-text">
-                       <span><ion-icon name="lock-closed-outline"></ion-icon></span> 
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-          </form>
-            <div class="text-center">
-                <?php if ($error): ?>
-                    <p class="text-danger"><?= $error ?></p>
-                <?php endif; ?>
-            </div>
-          <div class="text-center mt-3">
-            <small class="text-muted">© 2025 Sistem E-Presensi</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+    
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script> -->
 
 </body>
 </html>

@@ -44,7 +44,7 @@ $riwayat = $koneksi->query($query);
 </head>
 <body x-data="{ isOpen: false }" class="bg-gray-100">
   <!-- WRAPPER -->
-<div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col">
 
     <!-- HEADER -->
     <header class="bg-white shadow p-4 flex items-center justify-between sticky top-0 z-10">
@@ -111,31 +111,30 @@ $riwayat = $koneksi->query($query);
               
             <?php require_once '../../controllers/mhs/jadwal.php'; ?>
         </div>
-        <div class="mt-8 grid grid-cols-1" id="absen">
-            <div class="w-[1000px] max-w-full mx-auto">
-                <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <div class="mt-8" id="absen">
+          <div class="w-full max-w-4xl mx-auto">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Riwayat Kehadiran</h2>
 
-                    <h2 class="text-xl font-semibold mb-4">Riwayat Kehadiran</h2>
-    
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-200 text-sm">
-                            <thead class="bg-gray-100 text-gray-800">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 text-sm text-left">
+                        <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                                <th class="px-4 py-2 border-b">Tanggal</th>
-                                <th class="px-4 py-2 border-b">Mata Kuliah</th>
-                                <th class="px-4 py-2 border-b">Jam</th>
-                                <th class="px-4 py-2 border-b">Status</th>
+                                <th class="px-5 py-3 border-b font-medium">Tanggal</th>
+                                <th class="px-5 py-3 border-b font-medium">Mata Kuliah</th>
+                                <th class="px-5 py-3 border-b font-medium">Jam</th>
+                                <th class="px-5 py-3 border-b font-medium">Status</th>
                             </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($riwayat->num_rows > 0): ?>
-                                <?php while ($row = $riwayat->fetch_assoc()): ?>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 border-b"><?= $row['Tanggal'] ?></td>
-                                    <td class="px-4 py-2 border-b"><?= $row['Nama_MK'] ?></td>
-                                    <td class="px-4 py-2 border-b"><?= $row['Jam_mulai'] ?> - <?= $row['Jam_selesai'] ?></td>
-                                    <td class="px-4 py-2 border-b">
-                                    <span class="px-2 py-1 rounded-full text-white 
+                        </thead>
+                        <tbody class="text-gray-800">
+                            <?php if ($riwayat->num_rows > 0): ?>
+                            <?php while ($row = $riwayat->fetch_assoc()): ?>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-5 py-3 border-b"><?= $row['Tanggal'] ?></td>
+                                <td class="px-5 py-3 border-b"><?= $row['Nama_MK'] ?></td>
+                                <td class="px-5 py-3 border-b"><?= $row['Jam_mulai'] ?> - <?= $row['Jam_selesai'] ?></td>
+                                <td class="px-5 py-3 border-b">
+                                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-white
                                         <?= match($row['Status']) {
                                             'Hadir' => 'bg-green-500',
                                             'Izin' => 'bg-yellow-500',
@@ -145,20 +144,21 @@ $riwayat = $koneksi->query($query);
                                         } ?>">
                                         <?= $row['Status'] ?>
                                     </span>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                                <?php else: ?>
-                                <tr>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                            <?php else: ?>
+                            <tr>
                                 <td colspan="4" class="text-center py-4 text-gray-500">Belum ada data kehadiran.</td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+      </div>
+
         
      
 
@@ -167,7 +167,7 @@ $riwayat = $koneksi->query($query);
 
       </main>
     </div>
-</div>
+  </div>
   
 
   <!-- Ionicons -->
